@@ -1,0 +1,43 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /datamodule: sa_eend.yaml
+  - override /model: sa_eend.yaml
+  - override /callbacks: default.yaml
+  - override /logger: null
+  - override /trainer: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+# name of the run determines folder name in logs
+name: "sa_eend"
+
+seed: 12345
+
+trainer:
+  min_epochs: 10
+  max_epochs: 100
+  gradient_clip_val: 0.5
+
+model:
+  lr: 0.001
+  net:
+    n_speakers: 2
+    in_size: 345
+    n_heads: 4
+    n_units: 256
+    n_layers: 4
+    dim_feedforward: 2048
+    dropout: 0.1
+    has_pos: False
+
+datamodule:
+  batch_sizes: [64, 64, 1]
+
+logger:
+  wandb:
+    tags: ["sa_eend", "${name}"]

@@ -1,0 +1,13 @@
+_target_: src.datamodules.mnist_datamodule.DiarizationDataModule
+
+data_dirs: ${data_dirs} # data_dir is specified in config.yaml
+chunk_size: 500
+context_size: 7
+frame_size: 200
+frame_shift: 80
+subsampling: 10
+sample_rate: 8000
+input_transform: logmel23_mn
+n_speakers: 2
+batch_sizes: [64, 64, 1]
+num_workers: 0
