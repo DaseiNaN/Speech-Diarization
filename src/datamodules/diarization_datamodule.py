@@ -5,7 +5,10 @@ import torch
 from pytorch_lightning import LightningDataModule
 from torch.utils.data import DataLoader, Dataset
 
-from src.datamodules.components.diarization_dataset import DiarizationDataset
+from src.datamodules.components.diarization_dataset import (
+    DiarizationDataset,
+    DiarizationDatasetforInfer,
+)
 
 
 def collate_fn(batch):
@@ -86,7 +89,7 @@ class DiarizationDataModule(LightningDataModule):
                 input_transform=self.hparams.input_transform,
                 n_speakers=self.hparams.n_speakers,
             )
-            self.data_test = DiarizationDataset(
+            self.data_test = DiarizationDatasetforInfer(
                 data_dir=test_dir,
                 chunk_size=self.hparams.chunk_size,
                 context_size=self.hparams.context_size,
@@ -118,7 +121,7 @@ class DiarizationDataModule(LightningDataModule):
 
     def test_dataloader(self):
         return DataLoader(
-            dataset=self.data_val,
+            dataset=self.data_test,
             batch_size=self.hparams.batch_sizes[2],
             num_workers=self.hparams.num_workers,
             shuffle=False,
