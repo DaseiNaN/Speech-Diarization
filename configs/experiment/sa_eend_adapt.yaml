@@ -1,0 +1,69 @@
+# @package _global_
+
+# to execute this experiment run:
+# python train.py experiment=example
+
+defaults:
+  - override /datamodule: sa_eend.yaml
+  - override /model: sa_eend.yaml
+  - override /callbacks: sa_eend.yaml
+  - override /logger: wandb.yaml
+  - override /trainer: default.yaml
+
+# all parameters below will be merged with parameters from default configurations set above
+# this allows you to overwrite only specified parameters
+
+# name of the run determines folder name in logs
+name: "sa_eend_basic_adapt"
+
+seed: 777
+
+trainer:
+  min_epochs: 10
+  max_epochs: 100
+  gpus:
+    - 0
+
+adapt_from_checkpoint: /home/dasein/Projects/Speech-Diarization/logs/experiments/runs/sa_eend_basic/2022-03-24_18-16-38/avg/avg.ckpt
+
+model:
+  lr: !!float 1e-5
+  optimizer: adam
+  # noam_warmup_steps: 100000
+  # gradient_accumulation_steps: 1
+  # gradclip: 5
+  # chunk_size: 500
+  # net:
+  #   n_speakers: 2
+  #   in_size: 345
+  #   n_heads: 4
+  #   n_units: 256
+  #   n_layers: 4
+  #   dim_feedforward: 2048
+  #   dropout: 0.1
+  #   has_pos: False
+
+datamodule:
+  data_dirs:
+    - ${data_dir}/callhome/callhome1_spk2
+    - ${data_dir}/callhome/callhome2_spk2
+    - ${data_dir}/callhome/callhome2_spk2 # data_dir is specified in config.yaml
+  # chunk_size: 500
+  # context_size: 7
+  # frame_size: 200
+  # frame_shift: 80
+  # subsampling: 10
+  # sample_rate: 8000
+  # input_transform: logmel23_mn
+  # n_speakers: 2
+  # batch_sizes:
+  #   - 50
+  #   - 50
+  #   - 1
+  # num_workers: 0
+
+logger:
+  wandb:
+    tags: ["sa_eend", "${name}"]
+
+test: False

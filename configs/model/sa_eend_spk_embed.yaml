@@ -8,7 +8,7 @@ gradclip: 5
 chunk_size: 500
 
 net:
-  _target_: src.models.components.sa_eend.SAEEND
+  _target_: src.models.components.sa_eend_spk_embed.SAEENDSpkEmbed
   n_speakers: 2
   in_size: 345
   n_heads: 4
@@ -17,3 +17,4 @@ net:
   dim_feedforward: 2048
   dropout: 0.1
   has_pos: False
+  spk_emb_dim: 256

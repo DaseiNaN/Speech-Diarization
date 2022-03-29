@@ -1,6 +1,9 @@
-_target_: src.datamodules.mnist_datamodule.DiarizationDataModule
+_target_: src.datamodules.diarization_datamodule.DiarizationDataModule
 
-data_dirs: ${data_dirs} # data_dir is specified in config.yaml
+data_dirs:
+  - ${data_dir}/simu/train_clean_100_ns2_beta2_20000
+  - ${data_dir}/simu/dev_clean_ns2_beta2_500
+  - ${data_dir}/callhome/callhome2_spk2 # data_dir is specified in config.yaml
 chunk_size: 500
 context_size: 7
 frame_size: 200
@@ -9,5 +12,8 @@ subsampling: 10
 sample_rate: 8000
 input_transform: logmel23_mn
 n_speakers: 2
-batch_sizes: [64, 64, 1]
+batch_sizes:
+  - 50
+  - 50
+  - 1
 num_workers: 0

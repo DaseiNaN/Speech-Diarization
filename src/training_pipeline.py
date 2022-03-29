@@ -2,6 +2,7 @@ import os
 from typing import List, Optional
 
 import hydra
+import torch
 from omegaconf import DictConfig
 from pytorch_lightning import (
     Callback,
@@ -46,6 +47,11 @@ def train(config: DictConfig) -> Optional[float]:
     # Init lightning model
     log.info(f"Instantiating model <{config.model._target_}>")
     model: LightningModule = hydra.utils.instantiate(config.model)
+
+    # Adapt lightning model
+    if config.adapt_from_checkpoint:
+        log.info(f"Adapting model from ckpt: {config.adapt_from_checkpoint}")
+        model.net.load_state_dict(torch.load(config.adapt_from_checkpoint)["model"])
 
     # Init lightning callbacks
     callbacks: List[Callback] = []

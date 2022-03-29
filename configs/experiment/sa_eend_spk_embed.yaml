@@ -5,7 +5,7 @@
 
 defaults:
   - override /datamodule: sa_eend.yaml
-  - override /model: sa_eend.yaml
+  - override /model: sa_eend_spk_embed.yaml
   - override /callbacks: sa_eend.yaml
   - override /logger: wandb.yaml
   - override /trainer: default.yaml
@@ -14,7 +14,7 @@ defaults:
 # this allows you to overwrite only specified parameters
 
 # name of the run determines folder name in logs
-name: "sa_eend_basic"
+name: "sa_eend_spk_embed"
 
 seed: 777
 
@@ -22,7 +22,7 @@ trainer:
   min_epochs: 10
   max_epochs: 100
   gpus:
-    - 0
+    - 1
 
 # model:
 #   lr: !!float 1.0

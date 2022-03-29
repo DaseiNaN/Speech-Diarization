@@ -2,6 +2,9 @@
 # Shedule execution of many runs
 # Run from root folder with: bash scripts/schedule.sh
 
-python train.py trainer.max_epochs=5
+# kaldi env
+# sa_eend basic
+python train.py experiment=sa_eend
 
-python train.py trainer.max_epochs=10 logger=csv
+# sa_eend_spk_embed
+python train.py experiment=sa_eend_spk_embed

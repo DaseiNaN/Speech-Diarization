@@ -27,18 +27,18 @@ def pit_loss(pred, label):
       label_perms[min_index]: permutated labels
       sigma: permutation
     """
-
+    device = pred.device
     T = len(label)
     C = label.shape[-1]
     label_perms_indices = [list(p) for p in permutations(range(C))]
     P = len(label_perms_indices)
-    perm_mat = torch.zeros(P, T, C, C)
+    perm_mat = torch.zeros(P, T, C, C).to(device)
 
     for i, p in enumerate(label_perms_indices):
         perm_mat[i, :, torch.arange(label.shape[-1]), p] = 1
 
-    x = torch.unsqueeze(torch.unsqueeze(label, 0), -1)
-    y = torch.arange(P * T * C).view(P, T, C, 1)
+    x = torch.unsqueeze(torch.unsqueeze(label, 0), -1).to(device)
+    y = torch.arange(P * T * C).view(P, T, C, 1).to(device)
 
     broadcast_label = torch.broadcast_tensors(x, y)[0]
     allperm_label = torch.matmul(perm_mat, broadcast_label).squeeze(-1)
@@ -78,7 +78,7 @@ def batch_pit_loss(ys, ts, ilens=None):
     ]
     losses, labels, sigmas = zip(*loss_w_labels_w_sigmas)
     loss = torch.sum(torch.stack(losses))
-    n_frames = np.sum([ilen for ilen in ilens])
+    n_frames = np.sum([ilen.cpu() for ilen in ilens])
     loss = loss / n_frames
 
     return loss, labels, sigmas
